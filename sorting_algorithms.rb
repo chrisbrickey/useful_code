@@ -49,7 +49,7 @@ end
 # p bubble_sort_short!(my_arr) #sort ascending
 # p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
 
-def merge_sort(arr)
+def merge_sort(arr, &prc)
   # debugger
   return arr if arr.length <= 1
   mid = arr.length / 2
@@ -57,10 +57,10 @@ def merge_sort(arr)
   right = arr.drop(mid)
   sorted_left = merge_sort(left)
   sorted_right = merge_sort(right)
-  compare_and_merge(sorted_left, sorted_right)
+  compare_and_merge(sorted_left, sorted_right, prc)
 end
 
-def compare_and_merge(left, right, &prc)
+def compare_and_merge(left, right, prc)
   merged_arr = []
 
   until left.empty? || right.empty?
