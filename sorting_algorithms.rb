@@ -60,11 +60,11 @@ def merge_sort(arr)
   compare_and_merge(sorted_left, sorted_right)
 end
 
-def compare_and_merge(left, right)
+def compare_and_merge(left, right, &prc)
   merged_arr = []
 
   until left.empty? || right.empty?
-    prc = Proc.new { |x, y| [x, y].min }
+    prc ||= Proc.new { |x, y| [x, y].min }
     element_that_should_come_first = prc.call(left[0], right[0])
     if element_that_should_come_first == left[0]
       merged_arr << left.shift
