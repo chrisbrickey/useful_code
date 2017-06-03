@@ -60,4 +60,4 @@ def bubble_sort_long! (arr)
 end
 
 
-p bubble_sort_short!(my_arr)
+p bubble_sort_short!(my_arr) { |num1, num2| num1 <=> num2 } #sort ascending
