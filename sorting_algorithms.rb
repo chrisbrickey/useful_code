@@ -49,14 +49,15 @@ end
 # p bubble_sort_short!(my_arr) #sort ascending
 # p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
 
-def merge_sort(arr, &prc)
-  # debugger
+
+def merge_sort_with_spaceship(arr, &prc)
+  prc ||= Proc.new { |x, y| x <=> y}
   return arr if arr.length <= 1
   mid = arr.length / 2
   left = arr.take(mid)
   right = arr.drop(mid)
-  sorted_left = merge_sort(left)
-  sorted_right = merge_sort(right)
+  sorted_left = merge_sort_with_spaceship(left, &prc)
+  sorted_right = merge_sort_with_spaceship(right, &prc)
   compare_and_merge(sorted_left, sorted_right, prc)
 end
 
@@ -64,7 +65,37 @@ def compare_and_merge(left, right, prc)
   merged_arr = []
 
   until left.empty? || right.empty?
-    prc ||= Proc.new { |x, y| [x, y].min }
+    spaceship_result = prc.call(left[0], right[0])
+    if spaceship_result <= 0
+      merged_arr << left.shift
+    else
+      merged_arr << right.shift
+    end
+  end
+
+  merged_arr + left + right
+end
+
+p merge_sort_with_spaceship(my_arr)
+p merge_sort_with_spaceship(my_arr) { |x, y| y <=> x }
+
+
+#BELOW DOES NOT WORK YET
+def merge_sort_sans_spaceship(arr, &prc)
+  prc ||= Proc.new { |x, y| [x, y].min }
+  return arr if arr.length <= 1
+  mid = arr.length / 2
+  left = arr.take(mid)
+  right = arr.drop(mid)
+  sorted_left = merge_sort_sans_spaceship(left, &prc)
+  sorted_right = merge_sort_sans_spaceship(right, &prc)
+  compare_and_merge(sorted_left, sorted_right, prc)
+end
+
+def compare_and_merge(left, right, prc)
+  merged_arr = []
+
+  until left.empty? || right.empty?
     element_that_should_come_first = prc.call(left[0], right[0])
     if element_that_should_come_first == left[0]
       merged_arr << left.shift
@@ -76,4 +107,5 @@ def compare_and_merge(left, right, prc)
   merged_arr + left + right
 end
 
-p merge_sort(my_arr)
+p merge_sort_sans_spaceship(my_arr)
+p merge_sort_sans_spaceship(my_arr) { |x, y| [x, y].max }
