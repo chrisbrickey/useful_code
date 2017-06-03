@@ -2,19 +2,6 @@ require 'byebug'
 
 my_arr = [6, 9, 3, 67, 0, 12, 5, 8, 3]
 
-# def bubble_sort_short!(arr, &prc)
-#   # debugger
-#   return arr if arr.length <= 1
-#   prc ||= Proc.new { |x, y| y <=> x }
-#
-#
-#   # arr.map! { |x, y| prc.call(x, y) }
-# end
-#
-# p bubble_sort_short!(my_arr)
-# p bubble_sort_short!(my_arr) { |x, y| x <=> y }
-
-
 def bubble_sort_short! (arr, &prc)
   length = arr.length
   return arr if length <= 1
@@ -38,8 +25,6 @@ def bubble_sort_short! (arr, &prc)
   arr
 end
 
-
-
 def bubble_sort_long! (arr)
   length = arr.length
   return arr if length <= 1
@@ -61,5 +46,32 @@ def bubble_sort_long! (arr)
   arr
 end
 
-p bubble_sort_short!(my_arr) #sort ascending
-p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
+# p bubble_sort_short!(my_arr) #sort ascending
+# p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
+
+def merge_sort(arr)
+  # debugger
+  return arr if arr.length <= 1
+  mid = arr.length / 2
+  left = arr.take(mid)
+  right = arr.drop(mid)
+  sorted_left = merge_sort(left)
+  sorted_right = merge_sort(right)
+  compare_and_merge(sorted_left, sorted_right)
+end
+
+def compare_and_merge(left, right)
+  merged_arr = []
+
+  until left.empty? || right.empty?
+    if left[0] <= right[0]
+      merged_arr << left.shift
+    else
+      merged_arr << right.shift
+    end
+  end
+
+  merged_arr + left + right
+end
+
+p merge_sort(my_arr)
