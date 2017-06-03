@@ -64,7 +64,8 @@ def compare_and_merge(left, right)
   merged_arr = []
 
   until left.empty? || right.empty?
-    if left[0] <= right[0]
+    spaceship_result = left[0] <=> right[0]
+    if spaceship_result < 1
       merged_arr << left.shift
     else
       merged_arr << right.shift
