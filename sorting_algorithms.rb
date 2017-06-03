@@ -15,7 +15,7 @@ my_arr = [6, 9, 3, 67, 0, 12, 5, 8, 3]
 # p bubble_sort_short!(my_arr) { |x, y| x <=> y }
 
 
-def bubble_sort_short! (arr)
+def bubble_sort_short! (arr, &prc)
   length = arr.length
   return arr if length <= 1
 
