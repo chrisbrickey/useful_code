@@ -64,9 +64,9 @@ def compare_and_merge(left, right)
   merged_arr = []
 
   until left.empty? || right.empty?
-    prc = Proc.new { |x, y| x <=> y }
-    spaceship_result = prc.call(left[0], right[0])
-    if spaceship_result < 1
+    prc = Proc.new { |x, y| [x, y].min }
+    element_that_should_come_first = prc.call(left[0], right[0])
+    if element_that_should_come_first == left[0]
       merged_arr << left.shift
     else
       merged_arr << right.shift
