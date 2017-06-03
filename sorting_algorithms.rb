@@ -25,7 +25,8 @@ def bubble_sort_short! (arr, &prc)
     0.upto(length - 2) do |idx|
       x = idx
       y = idx + 1
-      if arr[x] > arr[y]
+      spaceship_result = prc.call(arr[x], arr[y])
+      if spaceship_result == 1
         arr[x], arr[y] = arr[y], arr[x]
         swapped = true
       end
