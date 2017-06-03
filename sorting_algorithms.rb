@@ -18,6 +18,7 @@ my_arr = [6, 9, 3, 67, 0, 12, 5, 8, 3]
 def bubble_sort_short! (arr, &prc)
   length = arr.length
   return arr if length <= 1
+  prc ||= Proc.new { |num1, num2| num1 <=> num2 }
 
   loop do
     swapped = false
@@ -60,5 +61,5 @@ def bubble_sort_long! (arr)
   arr
 end
 
-
-p bubble_sort_short!(my_arr) { |num1, num2| num1 <=> num2 } #sort ascending
+p bubble_sort_short!(my_arr) #sort ascending
+p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
