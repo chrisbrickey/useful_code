@@ -132,7 +132,6 @@ def permutations(arr)
   total_perms = []
 
   arr.each_index do |index|
-    # pivot = arr[index]
     left = arr.take(index)
     right = arr.drop(index + 1)
     subarray = left + right
