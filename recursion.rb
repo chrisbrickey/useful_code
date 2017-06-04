@@ -5,6 +5,7 @@ end
 
 # p factorial(4)
 
+
 def reverse(str)
   return str if str.length <= 1
   str[-1] + reverse(str[0...-1])
@@ -31,6 +32,18 @@ end
 # p nth_row_of_pascal(5)
 
 
+def fibonacci(n)
+  starter = [1, 1]
+  return starter.take(n) if n <= 2
+  prev_fibs = fibonacci(n - 1)
+  next_num = prev_fibs[-1] + prev_fibs[-2]
+  prev_fibs << next_num
+end
+
+# p fibonacci(1)
+# p fibonacci(2)
+# p fibonacci(8)
+
 def range(min, max)
   return [] if max < min
   range(min, max - 1) << max
@@ -45,6 +58,7 @@ def sumto(arr)
 end
 
 # p sumto([7, 2, 5])
+
 
 def exp(base, exp)
   return 1 if exp == 0
@@ -71,7 +85,6 @@ end
 # p exp_next_level(100, 0)
 
 
-
 def deep_dup(arr)
   return [arr[-1]] if arr.length <= 1
   deep_dup(arr[0...-1]) << arr[-1]
@@ -80,8 +93,8 @@ end
 my_arr = [9, 10, 11, [0, [4, [88, 9]]], [0, 7, [9, [0, 1], 3]]]
 duplicate = deep_dup(my_arr)
 my_arr << "hello"
-p my_arr
-p duplicate
+# p my_arr
+# p duplicate
 
 
 def deep_dup_inject(arr)
@@ -101,5 +114,34 @@ end
 my_arr = [9, 10, 11, [0, [4, [88, 9]]], [0, 7, [9, [0, 1], 3]]]
 duplicate = deep_dup(my_arr)
 my_arr << "hello"
-p my_arr
-p duplicate
+# p my_arr
+# p duplicate
+
+
+def subsets(arr)
+  return [[]] if arr.empty?
+  old = subsets(arr[0...-1])
+  old + old.map { |subarray| subarray + [arr[-1]] }
+end
+
+# p subsets([3, 4, 5])
+
+
+def permutations(arr)
+  return [arr] if arr.length <= 1
+  total_perms = []
+
+  arr.each_index do |index|
+    # pivot = arr[index]
+    left = arr.take(index)
+    right = arr.drop(index + 1)
+    subarray = left + right
+
+    total_perms += permutations(subarray).map do |element|
+      element << arr[index]
+    end
+  end
+  total_perms
+end
+
+p permutations([1, 2, 3])
