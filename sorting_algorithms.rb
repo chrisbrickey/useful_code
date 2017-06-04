@@ -111,3 +111,14 @@ end
 
 # p merge_sort_sans_spaceship(my_arr)
 # p merge_sort_sans_spaceship(my_arr) { |x, y| [x, y].max }
+
+
+def quick_sort(arr)
+  return [] if arr.length == 0
+  pivot_point = arr[0]
+  left = arr[1..-1].select { |el| el < pivot_point }
+  right = arr[1..-1].select { |el| el >= pivot_point }
+  quick_sort(left) + [pivot_point] + quick_sort(right)
+end
+
+p quick_sort(my_arr)
