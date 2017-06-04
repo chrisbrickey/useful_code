@@ -3,14 +3,14 @@ def factorial(n)
   n * factorial(n - 1)
 end
 
-p factorial(4)
+# p factorial(4)
 
 def reverse(str)
   return str if str.length <= 1
   str[-1] + reverse(str[0...-1])
 end
 
-p reverse("hello")
+# p reverse("hello")
 
 
 def nth_row_of_pascal(n)
@@ -28,7 +28,7 @@ end
 # p nth_row_of_pascal(2)
 # p nth_row_of_pascal(3)
 # p nth_row_of_pascal(4)
-p nth_row_of_pascal(5)
+# p nth_row_of_pascal(5)
 
 
 def range(min, max)
@@ -36,7 +36,7 @@ def range(min, max)
   range(min, max - 1) << max
 end
 
-p range(3, 10)
+# p range(3, 10)
 
 
 def sumto(arr)
@@ -44,16 +44,16 @@ def sumto(arr)
   sumto(arr[0...-1]) + arr[-1]
 end
 
-p sumto([7, 2, 5])
+# p sumto([7, 2, 5])
 
 def exp(base, exp)
   return 1 if exp == 0
   base * base**(exp - 1)
 end
 
-p exp(4, 2)
-p exp(2, 5)
-p exp(100, 0)
+# p exp(4, 2)
+# p exp(2, 5)
+# p exp(100, 0)
 
 
 def exp_next_level(base, exp)
@@ -66,6 +66,40 @@ def exp_next_level(base, exp)
   end
 
 end
-p exp_next_level(4, 2)
-p exp_next_level(2, 5)
-p exp_next_level(100, 0)
+# p exp_next_level(4, 2)
+# p exp_next_level(2, 5)
+# p exp_next_level(100, 0)
+
+
+
+def deep_dup(arr)
+  return [arr[-1]] if arr.length <= 1
+  deep_dup(arr[0...-1]) << arr[-1]
+end
+
+my_arr = [9, 10, 11, [0, [4, [88, 9]]], [0, 7, [9, [0, 1], 3]]]
+duplicate = deep_dup(my_arr)
+my_arr << "hello"
+p my_arr
+p duplicate
+
+
+def deep_dup_inject(arr)
+  return [arr[-1]] if arr.length <= 1
+
+  arr.inject([]) do |accumulator, element|
+    if element.is_a?(Array)
+      deep_dup_inject(element)
+    else
+      accumulator << element
+    end
+  end
+
+  accumulator
+end
+
+my_arr = [9, 10, 11, [0, [4, [88, 9]]], [0, 7, [9, [0, 1], 3]]]
+duplicate = deep_dup(my_arr)
+my_arr << "hello"
+p my_arr
+p duplicate
