@@ -16,16 +16,56 @@ p reverse("hello")
 def nth_row_of_pascal(n)
   current_row = [1]
   return [1] if n == 0
-  prev_row = nth_row_of_pascal(n - 1)
 
+  prev_row = nth_row_of_pascal(n - 1)
   (prev_row.length - 1).times do |index|
     current_row << prev_row[index] + prev_row[index + 1]
   end
   current_row << 1
 end
 
-p nth_row_of_pascal(1)
-p nth_row_of_pascal(2)
-p nth_row_of_pascal(3)
-p nth_row_of_pascal(4)
+# p nth_row_of_pascal(1)
+# p nth_row_of_pascal(2)
+# p nth_row_of_pascal(3)
+# p nth_row_of_pascal(4)
 p nth_row_of_pascal(5)
+
+
+def range(min, max)
+  return [] if max < min
+  range(min, max - 1) << max
+end
+
+p range(3, 10)
+
+
+def sumto(arr)
+  return arr[0] if arr.length <= 1
+  sumto(arr[0...-1]) + arr[-1]
+end
+
+p sumto([7, 2, 5])
+
+def exp(base, exp)
+  return 1 if exp == 0
+  base * base**(exp - 1)
+end
+
+p exp(4, 2)
+p exp(2, 5)
+p exp(100, 0)
+
+
+def exp_next_level(base, exp)
+  return 1 if exp == 0
+  if exp.even?
+    exp_next_level(base, exp - 1)**2
+    # exp_next_level(base, exp / 2)**2
+  else
+    base * exp_next_level(base, (exp - 1) / 2)**2
+  end
+
+end
+p exp_next_level(4, 2)
+p exp_next_level(2, 5)
+p exp_next_level(100, 0)
