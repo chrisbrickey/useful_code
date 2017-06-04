@@ -2,7 +2,30 @@ require 'byebug'
 
 my_arr = [6, 9, 3, 67, 0, 12, 5, 8, 3]
 
-def bubble_sort_short! (arr, &prc)
+def bubble_sort! (arr)
+  length = arr.length
+  return arr if length <= 1
+
+  loop do
+    swapped = false
+
+    0.upto(length - 2) do |idx|
+      x = idx
+      y = idx + 1
+      if arr[x] > arr[y]
+        arr[x], arr[y] = arr[y], arr[x]
+        swapped = true
+      end
+    end
+    break if swapped == false
+  end
+
+  arr
+end
+
+# p bubble_sort!(my_arr) #sort ascending
+
+def bubble_sort_with_proc! (arr, &prc)
   length = arr.length
   return arr if length <= 1
   prc ||= Proc.new { |num1, num2| num1 <=> num2 }
@@ -25,30 +48,8 @@ def bubble_sort_short! (arr, &prc)
   arr
 end
 
-def bubble_sort_long! (arr)
-  length = arr.length
-  return arr if length <= 1
-
-  loop do
-    swapped = false
-
-    0.upto(length - 2) do |idx|
-      x = idx
-      y = idx + 1
-      if arr[x] > arr[y]
-        arr[x], arr[y] = arr[y], arr[x]
-        swapped = true
-      end
-    end
-    break if swapped == false
-  end
-
-  arr
-end
-
-# p bubble_sort_short!(my_arr) #sort ascending
-# p bubble_sort_short!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
-
+# p bubble_sort_with_proc!(my_arr) #sort ascending
+# p bubble_sort_with_proc!(my_arr) { |num1, num2| num2 <=> num1 } #sort descending
 
 def merge_sort_with_spaceship(arr, &prc)
   prc ||= Proc.new { |x, y| x <=> y}
@@ -76,11 +77,11 @@ def compare_and_merge(left, right, prc)
   merged_arr + left + right
 end
 
-p merge_sort_with_spaceship(my_arr)
-p merge_sort_with_spaceship(my_arr) { |x, y| y <=> x }
+# p merge_sort_with_spaceship(my_arr)
+# p merge_sort_with_spaceship(my_arr) { |x, y| y <=> x }
 
 
-#BELOW DOES NOT WORK YET
+
 def merge_sort_sans_spaceship(arr, &prc)
   prc ||= Proc.new { |x, y| [x, y].min }
   return arr if arr.length <= 1
@@ -91,6 +92,7 @@ def merge_sort_sans_spaceship(arr, &prc)
   sorted_right = merge_sort_sans_spaceship(right, &prc)
   compare_and_merge(sorted_left, sorted_right, prc)
 end
+
 
 def compare_and_merge(left, right, prc)
   merged_arr = []
@@ -107,5 +109,5 @@ def compare_and_merge(left, right, prc)
   merged_arr + left + right
 end
 
-p merge_sort_sans_spaceship(my_arr)
-p merge_sort_sans_spaceship(my_arr) { |x, y| [x, y].max }
+# p merge_sort_sans_spaceship(my_arr)
+# p merge_sort_sans_spaceship(my_arr) { |x, y| [x, y].max }
