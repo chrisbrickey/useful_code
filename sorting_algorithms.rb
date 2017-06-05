@@ -2,6 +2,7 @@ require 'byebug'
 
 my_arr = [6, 9, 3, 67, 0, 12, 5, 8, 3]
 
+
 def bubble_sort! (arr)
   length = arr.length
   return arr if length <= 1
@@ -121,4 +122,33 @@ def quick_sort(arr)
   quick_sort(left) + [pivot_point] + quick_sort(right)
 end
 
-p quick_sort(my_arr)
+# p quick_sort(my_arr)
+
+
+#taking a proc doesn't make sense but included for fun
+def binary_search(arr, target, &prc)
+  return nil if arr.empty?
+  prc ||= Proc.new {|x, y| x <=> y }
+  probe = arr.length / 2
+
+  result = prc.call(target, arr[probe])
+  if result == -1
+    binary_search(arr.take(probe), target, &prc)
+  elsif result == 0
+    probe
+  else
+    interim = binary_search(arr.drop(probe + 1), target, &prc)
+    interim.nil? ? nil : probe + 1 + interim
+  end
+end
+
+# p binary_search([1, 2, 3], 1) # => 0
+# p binary_search([2, 3, 4, 5], 3) # => 1
+# p binary_search([2, 4, 6, 8, 10], 6) # => 2
+# p binary_search([1, 3, 4, 5, 9], 5) # => 3
+# p binary_search([1, 2, 3, 4, 5, 6], 6) # => 5
+# p binary_search([1, 2, 3, 4, 5, 6], 0) # => nil
+# p binary_search([1, 2, 3, 4, 5, 7], 6) # => nil
+# sorted_arr = my_arr.dup.sort
+# p "sorted_arr: #{sorted_arr}"
+# p binary_search(sorted_arr, 67) #3
