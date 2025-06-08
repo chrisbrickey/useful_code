@@ -1,1 +1,12 @@
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Cache
+__pycache__
+
+# Configuration
+.idea
+.qodo
+
+# Ruby
 .byebug_history
