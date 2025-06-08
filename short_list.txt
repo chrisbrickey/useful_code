@@ -1,0 +1,457 @@
+# EDGE CASES (on input AND output!)
+!! 1 question that evolves or two totally different algorithms?
+
+LIST TEST CASES as variation within inputs; list all the types of variation as test cases that should be developed - even if you don't actually write the tests
+...DUPLICATES
+...min/max (or range of chars): Can the range be iterated over in constant time?
+...nums: empty, zeros, negatives, floats/division
+        # negatives/zeros impact multiplication/division a lot; negatives impact addition a lot
+...chars: "", spaces, caps, punctuation, !escape sequences (\n \t)
+..big/small/empty arrays and grids (manage them all AND call out test cases for all)
+
+inputs:
+   ...sorted?
+   ...size bounds
+        small enough for constant iteration?
+        small enough to avoid stack overflow on a recursive solution? (e.g. you can't use a recurive solution to explore an image of 1GB; use iterative solution and mimic stack with dynamic array)
+        hold in memory? (250M 32-bit integers, assuming 1GB RAM)
+
+outputs:
+    ...include duplicates?
+    ...order matters?
+    ...If more that one thing returned, create a class (testability)
+
+time/space: !! MUST ASK which are we constrained by? any targets?
+
+Process:
+- write out all examples
+- draft brute force, state time/space complexity and bottleneck
+- draft and code optimized, state time/space complexity immediately (big O or ammortized)
+- break out helpers, test separately
+
+# NUMBERS
+float('inf').. when searching a minimum; positive infinity
+float('-inf').. when searching a maximum; negative infinity
+round(3.5667)    rounds to nearest integer
+round(3.5667, 2) rounds to 2 decimal places
+
+# STRING METHODS (strings are immutable in python; time complexity always length of ALL characters involved)
+ASCII: a = 97; z = 122; A = 65; Z = 90
+chr(65) -> 'A'
+ord('A') -> 65
+
+    # Excel sheet
+    def _translate_col_label_to_index(self, col_label):
+        """col_label is the actual index + 64; 'A' -> 65 -> index 1; row_label is already the actual index"""
+        return ord(col_label) - 64
+
+!! Must reassign; String methods are not destructive b/c strings are immutable.
+x = str.upper(): Converts all characters to uppercase
+x = str.lower(): Converts all characters to lowercase
+x = str.capitalize(): Capitalizes first character, converts rest to lowercase
+x = str.strip(): Removes whitespace from beginning and end
+x = str.replace(old, new): Replaces occurrences of substring
+x = str[::-1] reverses a string
+
+list(str): Converts all characters to elements of a list
+    x = list('cat') ->  ['c'` 'a'` 't']
+str.split(): Splits string into a list by separator (' '  by default)
+    x = 'apple-orange'.split('-') -> ['apple, orange']
+str.join(my_list): Converts elements in a list, joined by the str.
+    x = ' '.join(['cat', 'dog']) -> 'cat dog'
+
+punctuation = '''!()-[]{};:'"\\,<>./?@#$%^&*_~\\n\\t'''
+# escape sequences and slashes must use double \\; Think carefully about whether you want to replace spaces at this point (if so add to punctuation string)
+new_str = original_str
+for char in punctuation:
+     # You must keep mutating and reassigning to new variable; If you keep referencing the original string then only the last loop will take
+    new_str = new_str.replace(char, "")
+
+str.isupper(): Returns True if all characters are uppercase
+str.islower(): Returns True if all characters are lowercase
+str.isalpha(): Returns True if all characters are alphabetic
+str.isdigit(): Returns True if all characters are digits
+str.startswith(prefix): Checks if string starts with the specified prefix
+str.endswith(suffix): Checks if string ends with the specified suffix
+str.find(sub): Returns lowest index where substring is found (-1 if not found)
+str.count(sub): Counts non-overlapping occurrences of substring
+
+String matching
+  if order important:
+    s1 == s2 (works in python b/c strings immutable)
+
+  if order not important:
+    store1, store2 = Counter(s1), Counter(s2)
+    store1 == store2 # only works if shallow; not good if duplicates allowed
+    points1 == points2 # ensures constant time comparison and accommodates duplicates
+
+
+# LISTS
+span, window, buckets, words, phrases, ciphers, patterns, threads, l1, l2, items, elements, stream, fleat
+nums, digits, values, figures, integers, chiffres, pairs
+
+! Add hash set instead to search in constant time.
+! Do not create nested lists using *. Weird behavior. Just do it old school.
+
+negated = [-n for n in nums]
+filtered = [n for n in nums if <insert filter condition>]
+tiny, enorm = (s1, s2) if len(s1) <= len(s2) else (s2, s1)
+my_list.count(x)  returns count of element in the list
+
+Create array of zeros so can assign at any index:
+my_list = [0] * length
+
+Get index and element:
+for i, char in enumerate(word):
+
+Iterate reverse order
+for i in range(len(nums) - 1, -1, -1): ...start, excluded_end, step
+
+Sort subarrays by 1st element only (so each subarray remains same)
+my_list.sort(key = lambda i : i[0])    replace with i[1] to sort by 2nd element etc
+
+Automatically generate a bunch of numbers in an array:
+   list(range(start, end + 1, 2))
+
+sliding window one size:
+for right in range(len(nums)):
+    # add right element
+
+    # advance right until you have one full window; Must do this for drop to work correctly.
+    if right < (span - 1):
+        continue
+
+    # do initial calculation on this first window
+
+    # drop from left
+    left_index = (right - span + 1) # 2
+
+    # subsequent loops omit full calculation
+
+min sliding window (changes size):
+    left = 0
+    for right, n in enumerate(nums):
+        # add right element
+        # while winning....
+            # record win
+            # shrink by increasing left (left += 1); dropping element
+
+        # now losing; grow right until winning... which happens automatically on next iteration
+
+max sliding window (changes size):
+    left = 0
+    for right, char in enumerate(word): # goal: winning at the top of the loop
+
+        # while losing, drop from left; NB: don't need to manage bounds if looking for duplicate that was definitely added before
+
+        # record win (b/c winning now)
+        # add right element to running tally
+
+
+# DICTS
+digit_to_char, id_to_metadata
+store, depot, vault, lexicon, words, guide, counts, nest
+
+my_dict.pop(key_name, None) # None prevents raising exception if key not in dict
+filtered_dict = {k:v for k, v in original_dict.items() if <insert condition>}
+
+from collections import Counter
+histogram = Counter(my_list)
+default_zeros = Counter(); now you can just increment values when adding keys
+zeroed_dict = {key: 0 for key in histogram} # same keys; all values are zero
+set_dict = {key: set() for key in range(size)}; 'key' is just a variable name, we could use i {i: set() for i in range(size)}
+
+
+from collections import defaultdict
+array_dict = defaultdict(list); Now default value is empty list.
+
+
+from collections import OrderedDict
+ordered_dict = OrderedDict()
+ordered_dict['kiwi'] = 4 # adds new key value pair
+ordered_dict.pop('kiwi') # pops a specific key regardless of how recently it was added
+
+# pops
+newest_item = ordered_dict.popitem()
+oldest_item = ordered_dict.popitem(last=False)
+
+# peeks
+oldest_item = list(ordered_dict.items())[0] # Peek at oldest
+oldest_items = list(ordered_dict.items())[:3] # Peek at the 3 oldest items
+youngest_item = list(ordered_dict.items())[-1] # Peek at youngest
+youngest_items = list(ordered_dict.items())[-3:] # Peek at the 3 youngest items
+
+# NAMED TUPLES (instead of writing out classes; cannot edit!!)
+from collections import namedtuple
+Log = namedtuple("Log",["id","time","isStart"]) *define as numbers/booleans; avoid strings
+log0 = Log(0, 0, True)
+log0.id  -> 0
+
+# STACKS/QUEUES
+from collections import deque   ('deck'; doubly linked list under the hood; so popping/pushing from either side is constant time)
+q = deque(['A'` 'B'` 'C'])
+q.append(x)  ; q.extend(list);
+q.appendleft(x) is constant time - unlike list!
+q.popleft() # as q
+q.pop() # as stack
+
+# HEAPS
+import heapq
+heapq.heapify(my_list); build: time O(N) space O(1) in place! ; Now my_list is actually a min heap. You can only get linear time if you use heapify on an existing array.
+# creates minheap; for maxheap: negate all numbers on the way in AND on the way out
+# len(my_list) remains correct after heapify; index 0 still works
+
+# If we built manually as a binary tree with sorted property:
+    build: O(N*logN)
+    left_child = 2*i, right_child = 2*i + 1, parent = i // 2
+    index 0 is a dummy index! start at 1
+
+heapq.heappush(my_list, element_to_add); O(logN) b/c always balanced and only need to work up or down the height of the tree once
+heapq.heappop(my_list) removes minimum from the heap;  O(logN) b/c always balanced and only need to work up or down the height of the tree once
+heapq.nlargest(my_list, k) returns list of kth largest numbers; O(k*logN)
+heapq.nsmallest(my_list, k) returns list of kth smallest numbers; O(k*logN)
+
+to find median from stream of values:
+use  maxHeap of small values and minHeap of larger values
+... always add to minHeap and then balance nodes between 2 heaps
+
+# GRIDS
+
+increments = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+ROWS, COLS = len(grid), len(grid[0])
+for r in range(ROWS):
+    for c in range(COLS):
+        ...grid[r][c]
+
+        on_horizontal_edges = (r == 0) or (r == ROWS - 1)
+        on_vertical_edges = (c == 0) or (c == COLS - 1)
+
+If only travelling to right and down: no visited set required
+If can move in all directions : must keep visited set (avoid going in a circle)
+If counting paths that can overlap:
+    ...dfs iterative: stack.append((r, c, visited)); Before adding to the stack, create a new set: new_set = visited.copy() This keeps track of cells visited in one path but allows reuse of them in other paths.
+    ...dfs recursive: at top: visited.add((r, c)); at bottom: visited.remove((r, c)) ...so can reuse that cell on a different path
+
+# XOR (find diff btwn list of integers)
+x ^ x = 0
+x ^ y ^ x = y ... if you xor all of them, result = unique value
+
+# LOGIC
+a = 'A' if (n % 2 == 0) else 'B'
+
+# I think you can declare variables within if/else/match and then use them outside that scope.
+r, c = None, None
+match method:
+    case "dfs":
+        r, c = qs.pop()
+    case "bfs":
+        r, c = qs.popleft()
+    case _:
+        raise "Method not recognized" # use all caps for errors
+
+try:
+    from binary_search_tree import BST, Node
+except ModuleNotFoundError as e:
+    print(f"Error importing module: {e}")
+finally:
+    # tear down actions like close db connection
+
+try:
+    minStack.pop()
+    assert False, "Expected Error but no error occurred"
+except Exception:
+    pass  # Expected error, so we do nothing
+
+
+# RUNNING TESTS
+pytest
+    or
+python3 -m unittest <test file>
+
+import unittest
+class TestExcel(unittest.TestCase):
+
+    def setUp(self): # must be uppercase U
+        self.sheet = Excel(3, 'C')
+
+    def tearDown(self): # must be uppercase D
+        self.sheet.value = None
+
+    @unittest.SkipTest
+    def test_something(self):
+        ....
+
+# FILES
+file = open('example.txt', 'r')
+lines = file.readlines()
+content = file.read()
+file.close()
+
+# OOP
+from dataclasses import dataclass
+@dataclass
+
+# TIME
+import time
+time.time()      creates timestamp in seconds so you can compare when things happen
+time.sleep(0.1)  holds your code for that many seconds
+
+# REGEX
+
+# LIBRARIES
+import requests
+response = requests.get(current_url)
+html_doc = response.text
+
+
+TRICKS
+- You can presort array in linear time! if you can use heapq.heapify(my_array) or bucket_sort (range of numbers < 10K)
+
+- Don't try to do everything in one data structure. Keep two or more data structures to allow constant time access.
+    Add a hash set or hash table to lookup in O(1).
+
+- If array ordered, you can determine when there is a new number if l[i] != l[i-1]
+       Sliding window that changes size is good for capturing sequences of repeated elements
+
+- If array not ordered, you can find sequences by only looking for the start of a sequence: [100, 4, 200, 1, 2, 3]
+        make a set of the numbers
+        if (num - 1) not in store and (num + 1) in store: ...1 is the start of a sequence
+
+- A pointer/index might be the return value you need (marks where a process terminated)
+
+- Examining pairs of elements in an array / Optimizing a nested loop O(N^2):
+    If you really need to process every pair/combo, then you can't do better than nested loop O(N^2) because there are inherently N(N-1)/2 pairs to consider.
+    But it can be O(N) if given one element you know what it's pair should look like (e.g. sum to a number, is reverse of the first one).
+    ...First loop: Put all elements in a hashset or hashtable so can access in constant time.
+    ...Second loop (sequential, not nested): Look at each element and determine if its 'match' is in the hashset. DO NOT LOOK AT SELF! (current_index != other_index)
+
+- Brute force circular array; Time: O(N^2); outer loop with an offset and two non-overlapping (subsequent) inner loops: one that goes to end and one that loops around without overlapping
+    outer loop: for offset in range(0, len(nums)); left = offset
+                    for right in range(offset, len(nums)):
+                    for right in range(0, offset):
+
+- Looking for sums/products on sorted list: Two pointers outside-in reduces O(N^2) to O(N)
+    left += 1 when sum too low; right -= 1 when sum too high
+    OR .. move the pointer that is less optimal; e.g. finding largest area... move the pointer with the smaller height
+
+- Looking for patterns/palindromes: Two pointers inside-out reduces O(N^3) to O(N^2)
+    first loop (odd-sized palindromes): size = 1; left = right = i; while in bounds: count += 2 and left -= 1 and right += 1
+    second loop (even_sized: size = 2; left = i; right = i + 1; while in bounds: count += 2 and left -= 1 and right += 1
+
+- Sliding Window reduces O(N^2) to O(N): finds contiguous segments that meet a criteria (in constant time); update values as you drop/add items from window
+    - if the window stays one size: only need right pointer (left side = right - span + 1) but might be nice to add 2nd pointer for clarity (must remember to advance left); MUST ADVANCE UNTIL WINDOW FULL (or the drop on the left will not work correctly)
+    - if the window changes size: need two pointers: left and right;
+        - if min window: add current element, grow until you are winning, record (b/c now winning), shrink from left while winning (re-record b/c still winning and getting smaller), exit when losing b/c need to grow again, advance right via loop
+        - if max window: while losing (e.g. duplicate present): shrink from left, record (b/c now you are winning); Always add current element (and advance right via loop)
+    - goal: evaluation of window in constant time; it's ok to look at every key in a dict if there is a limit on keys (e.g. uppercase letters = O(26)); BUT if there are duplicates then {} == {} does NOT work!! (use points instead)
+    - if there is more than one constraint for a 'correct window' ask to do the problem with only 1 constraint first and then add the 2nd constraint after you have working structure
+
+- Prefix (or Postfix) sum: keeping a separate array with sums/products starting from left (or right) so you can quickly look up the sum of a range without iterating over every element in the range
+....To access the min or max of any data structure at any given point in time... keep an additional heap with copies of the elements so the min/max can always be accessed in current time.
+....If working from an array just keep a second stack with minimums.
+....If 2d grid, sums reflect elements to the left AND above (must subtract overlap); add dummy row on top and dummy col at left to hold the zeros (useful when accessing cells at the edge of original grid)
+
+- If you are looking at sums on left and right side of an index, you don't actually have to iterate to the end (or build separate data structure) to sum on the right side.
+        Just find the overall sum (or product as long as there are no zeros)
+        sum_on_right = overall_sum - sum_on_left - sum_at_index
+
+- You can count the subarrays that sum to a target in linear time.
+    Seed a counter: {0: 1}. This will keep the sums of the entire subarrays to the left of pointer so that you know how many subarrays starting from first index can you remove to meet the target.
+    for num in nums:
+        rolling_sum += num
+        diff_from_target = rolling_sum - target
+        count += store[diff_from_target]           # this is the count you return
+        store[rolling_sum] += 1
+
+- Fast and Slow pointers: finding midpoints, cycles (when fast and slow meet)
+      Is cycle? Move fast and slow pointers until intersect. If intersect, there is a cycle.
+      Start of cycle? Add 2nd slow pointer at head. Move both slow pointers toward eachother until meeting (if doubly linked list). Or advance both by 1 until they meet. That meetpoint will be the beginning of the cycle.
+      Time: O(N) worst case is the entire list is a circle. The time for nodes to meet in both parts is just some multiple of N.
+      You can use this to find a duplicate in an array if there are tight constraints on the range of elements in the array.
+
+- Linked list in place reversal: use 3 pointers so that you rearrange the pointers between nodes just by holding the nodes and changing the pointers between them without an additional data structure (e.g. stack)
+
+- Two linked lists: Iterating over two always results in O(l1 + l2) time complexity.
+    "Each pointer advances at most it's entire length."
+    Its rare that you will get to advance both pointers at same time.
+    The worst case scenario is always that you advance only 1 pointer for each iteration of the loop (until hit the end of one of the lists).
+    It really doesn't matter which list or shorter or if the values are particularly good/bad inside the nodes.
+
+- Top K Elements: Use min/max heap; Limit the heap size to K… you don’t have to store every element in the heap; QuickSelect is an alternative algorithm for solving this but it is much more complex.
+
+- BFS: Finding shortest path or connected items in a graph
+
+- Binary Tree Traversal: preorder (copy tree), in order (report from least to greatest), postorder (delete tree)
+
+- DFS: Exploring paths between nodes
+
+- Backtracking: exploring all potential solution paths (and backtracking when it’s not going to lead to a valid solution)
+
+- Dynamic Programming: when there are overlapping problems or counting the ways of doing something (Knapsack; Subset Sum; Matrix Chain Multiplication)
+
+- Matrix Traversal (usually 2D array): can use BFS/DFS for this e.g. count islands
+        if you need to ignore land that touches the border, traverse borders only AND mutate 1s to 0s; make second pass where you count islands as usual
+
+        - loop on grid exists if occupying the same cell AND same orientation
+        - no loop on grid if after 4 iterations distance has changed but direction has not (will continue moving further away); 4 b/c that is usually the number of directions possible
+
+        If the matrix does not represent actual physical space, try not to use r, c. They get really confusing.
+            e.g. grid[person][other_person]
+
+    Symmetrical matrix (e.g. employee ids) ROWS == COLS and the axes are the same so just think of it like an array 0-> N
+       p1, p2 = 0, ROWS - 1. Move them toward each other. You are done when they are on the same cell.
+
+- Trie: Find common prefix between two lists. Linear time to build trie from list1. Linear time to traverse list2 to find prefixes. "Linear" in this case means entire content (number of elements * avg size of elements).
+
+- Monotonic stack: to understand 'behavior' in the input to the left/right of an index; to find the next greatest/smallest element in a collection
+    The stack is ordered (e.g. all descending).
+    As you iterate, when you encounter an element that can't keep order, that's when you start popping off the stack.
+
+- Overlapping Intervals: good for merging intervals and interval intersections and insert interval and find min number of meeting rooms with overlapping meeting times
+     Sort the input by the first element in each subarray: intervals.sort(key = lambda i: i[0])
+     Always draw out overlapping examples because they get more complicated that you imagine. The picture always helps.
+
+- Modified Binary Search: When the array is not perfectly sorted but there is part of it that is ordered
+
+- Result class: If you are asked to return more than one type of thing in the output
+    Don't jam the different items into a structure e.g. return [highest_count, [results]]
+    Instead, quickly (class Answer:) that separates these entities as properties on Answer and can be returned as a single instance of Answer (TESTABILITY)
+        or named tuple: Result = namedtuple("Result", ["nums", "largest"]); return Result([], 9)
+
+# MEMORY = GB = 1 billion bytes (giga = billion)
+The size of an array that can fit into 1GB of RAM depends on the data type of the elements in the array.
+Examples for common data types:
+
+Boolean (1 byte per element):
+    1 Billion elements.
+
+8-bit integer (1 byte per element):
+    1 Billion elements.
+
+16-bit integer (2 bytes per element):
+    500 M elements.
+
+32-bit integer or floating point (4 bytes per element):
+    250M elements
+
+64-bit integer or floating point or timestamp (8 bytes per element):
+    100M elements
+
+
+
+# HACKERRANK
+    # TODO: comment out for performance measurements
+    run_tests()
+
+def run_tests():
+    print("TESTS PASSING") ...last line to ensure this method is being called
+
+input1 = input()
+input2 = input()
+-----stripping etc.
+method_call()
+print("f,input1: {input1}")
+print("f,input2: {input2}\n")
+
+n = int(test1.strip()) # strip to remove spaces from beg/end; .lstrip() and rstrip() to only remove spaces from one side
+nums = list(map(int, test2.strip().split()))
